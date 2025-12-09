@@ -1,6 +1,6 @@
 # 🏛️ Clash of Pantheons: The Gate Guardians
 
-    ![Um texto descritivo](assets/imgs/img001.jpeg)
+![Um texto descritivo](assets/imgs/img001.jpeg)
 
 > **O equilíbrio entre os mundos foi rompido.** > Fantasmas, demônios e entidades esquecidas emergem para consumir a existência. Em um pacto inédito, os grandes deuses se uniram para guardar a passagem.
 
