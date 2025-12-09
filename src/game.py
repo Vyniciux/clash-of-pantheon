@@ -80,10 +80,10 @@ class Game:
                             if not d.coletado and d.rect.collidepoint(ev.pos):
                                 d.coletado = True
                                 if d.rd == 1: 
-                                    multiplicador_dano += 0.25 
+                                    self.multiplicador_dano += 0.25 
                                     self.set_popup("Dano de Ataque Aumentado!", self.CORES_DROP[1]) # Feedback 1
                                 if d.rd == 2: 
-                                    multiplicador_vel += 0.25 
+                                    self.multiplicador_vel += 0.25 
                                     self.set_popup("Velocidade de Ataque Aumentada!", self.CORES_DROP[2]) # Feedback 2
                                 if d.rd == 3: 
                                     self.estado_jogo = "VITORIA_EPICA" 
@@ -146,9 +146,9 @@ class Game:
                     # Se a vida zerar (morreu)
                     if i.vida <= 0:
                         if i.e_boss: # Se for boss, gera explosão e drop
-                            for _ in range(30): self.lista_particulas.append(Particula(i.x, i.y, self.CORES_DROP[round_atual]))
-                            self.lista_drops.append(Drop(i.x, i.y, round_atual, self.CORES_DROP))
-                            if round_atual < 3: round_atual += 1; self.alminhas_restantes = 30 # Prepara próximo round
+                            for _ in range(30): self.lista_particulas.append(Particula(i.x, i.y, self.CORES_DROP[self.round_atual]))
+                            self.lista_drops.append(Drop(i.x, i.y, self.round_atual, self.CORES_DROP))
+                            if self.round_atual < 3: self.round_atual += 1; self.alminhas_restantes = 30 # Prepara próximo round
                         self.ouro += 25 # Recompensa em ouro
                         self.lista_inimigos.remove(i)
                     # Se o inimigo chegou no final (atravessou o portal)
