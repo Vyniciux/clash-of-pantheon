@@ -60,7 +60,7 @@ class Game:
                     120+ 140*i - (i//5)*140*5, #PosX
                     100 + (i//5)*140, #PosY
                     110,110))
-        self.last_level = 1
+        self.last_level = 0
         self.actual_level = 0
 
     def set_popup(self, texto, cor):
@@ -81,8 +81,11 @@ class Game:
         self.tela.blit(txt_render, (20, 15))
 
     def reset_jogo(self):
-        self.round_atual = 1
-        self.alminhas_restantes = 30
+        self.round_atual = 0
+        self.inimigo_atual = ""
+        self.alminhas_restantes = 0
+        self.espera = 0
+        self.espera_orda = 0
         self.ouro = 400
         self.vidas = 20
         self.multiplicador_dano = 1.0

@@ -72,3 +72,80 @@ DADOS_DEUSES = {
 TOWER_RADIO = {"Zeus": 20, "Anubis": 20, "Odin": 24}
 MIN_DIST_MARGIN = 8
 ODIN_SCALE = 1.15
+
+INIMIGOS_DADOS = {
+    # --- ROUND 1: Introdução ---
+    "FANTASMA_1": {
+        "SPRITE": "SPRITE_ROUND1", 
+        "VIDA_BASE": 10,        # Vida baixa, morre com poucos tiros
+        "VELOCIDADE": 2.0,      # Velocidade padrão
+        "BOSS_FLAG": False
+    },
+    "BOSS_1": {
+        "SPRITE": "SPRITE_BOSS1", 
+        "VIDA_BASE": 150,       # Boss precisa aguentar o caminho todo
+        "VELOCIDADE": 1.5,      # Bosses costumam ser um pouco mais lentos e pesados
+        "BOSS_FLAG": True
+    },
+
+    # --- ROUND 2: Aceleração (Inimigos mais rápidos) ---
+    "FANTASMA_2": {
+        "SPRITE": "SPRITE_ROUND2", 
+        "VIDA_BASE": 25,        # Um pouco mais de vida que o anterior
+        "VELOCIDADE": 3.0,      # Mais rápido! Jogador precisa de torres de tiro rápido (Zeus)
+        "BOSS_FLAG": False
+    },
+    "BOSS_2": {
+        "SPRITE": "SPRITE_BOSS2", 
+        "VIDA_BASE": 400,       # Vida escala bastante
+        "VELOCIDADE": 2.0,      # O Boss 2 corre na velocidade de um inimigo normal
+        "BOSS_FLAG": True
+    },
+
+    # --- ROUND 3: O Apocalipse (Tanques de Guerra) ---
+    "FANTASMA_3": {
+        "SPRITE": "SPRITE_ROUND3", 
+        "VIDA_BASE": 60,        # Aguenta muita pancada
+        "VELOCIDADE": 1.8,      # Ligeiramente mais lento por ser pesado
+        "BOSS_FLAG": False
+    },
+    "BOSS_3": {
+        "SPRITE": "SPRITE_BOSS3", 
+        "VIDA_BASE": 1500,      # O Boss Final: Quase imortal
+        "VELOCIDADE": 1.0,      # Muito lento, criando tensão enquanto se aproxima do final
+        "BOSS_FLAG": True
+    }
+}
+
+FASE_SCRIPT = [  
+    # --- FASE 1: O Início ---
+    [
+        # Onda 1: 5 fantasmas lentos para aquecer
+        ("FANTASMA_1", 5, 60, 180), 
+        # Onda 2: 10 fantasmas, vindo mais rápido
+        ("FANTASMA_1", 10, 40, 300), 
+        # Boss: Vem sozinho
+        ("BOSS_1", 1, 0, 0)
+    ],
+
+    # --- FASE 2: Aceleração (Inimigos Rápidos) ---
+    [
+        # Onda 1: Mistura de lento e rápido
+        ("FANTASMA_1", 5, 50, 60),
+        ("FANTASMA_2", 5, 50, 200),
+        # Onda 2: Rush de 15 rápidos (teste de DPS)
+        ("FANTASMA_2", 15, 30, 300),
+        # Boss
+        ("BOSS_2", 1, 0, 0)
+    ],
+
+    # --- FASE 3: O Apocalipse (Tanques) ---
+    [
+        # Onda 1: Tanques lentos servindo de escudo para os rápidos
+        ("FANTASMA_3", 5, 80, 100),
+        ("FANTASMA_2", 10, 25, 200),
+        # Onda 2: Caos total
+        ("FANTASMA_3", 8, 60, 0), # Note o delay 0: o Boss vem junto com os últimos!
+        ("BOSS_3", 1, 0, 0)
+    ]
+]
