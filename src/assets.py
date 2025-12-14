@@ -47,7 +47,7 @@ def carregar_todos_assets():
     BOSS1_FILENAME = "cerbero.png"
     BOSS2_FILENAME = "mumia.png"
     BOSS3_FILENAME = "jormungand.png"
-    COIN_FILENAME = "coin.png"
+    CAMPO_FILENAME = "campo.png"
 
     SPRITE_ROUND1 = tentar_carregar(SPRITE_ROUND1_FILENAME)
     SPRITE_ROUND2 = tentar_carregar(SPRITE_ROUND2_FILENAME)
@@ -70,7 +70,7 @@ def carregar_todos_assets():
     SPRITE_BOSS1 = tentar_carregar(BOSS1_FILENAME)
     SPRITE_BOSS2 = tentar_carregar(BOSS2_FILENAME)
     SPRITE_BOSS3 = tentar_carregar(BOSS3_FILENAME)
-    SPRITE_COIN = tentar_carregar(COIN_FILENAME)
+    SPRITE_CAMPO = tentar_carregar(CAMPO_FILENAME)
 
     SPRITES = {
         "SPRITE_ROUND1": SPRITE_ROUND1,
@@ -98,6 +98,6 @@ def carregar_todos_assets():
             "Odin":   [400, 230, 5, 20, (50, 50, 100)]
         },
         "TOWER_RADIO_OVERRIDE": {"Zeus":20,"Anubis":20,"Odin":24},
-        "COIN": SPRITE_COIN
+        "CAMPO": SPRITE_CAMPO
     }
     return SPRITES

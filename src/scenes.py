@@ -24,7 +24,11 @@ def Menu(game):
 
 def Levels(game):
 
-    game.tela.fill(FUNDO_MENU)
+    bg = game.SPRITES.get("CAMPO")
+    if bg is not None:
+        game.tela.blit(bg, (0,0))
+    else:
+        game.tela.fill(FUNDO_MENU)
 
     pos_mouse = pygame.mouse.get_pos()
     for i in range(NUM_LEVELS):
@@ -161,6 +165,8 @@ def Jogando(game):
     game.tela.blit(info, (20,570))
     drops_text = game.fonte_ui.render(f"Itens Divinos: {game.drops_coletados}/3", True, OURO)
     game.tela.blit(drops_text, (20,600))
+    setas = game.fonte_ui.render("(          )", True, BRANCO)
+    game.tela.blit(setas, (767, 580))
 
     if game.switch_anim_timer > 0:
         progress = game.switch_anim_timer / float(game.switch_anim_duration)
@@ -202,10 +208,10 @@ def Vitoria_Epica(game):
         game.tela.blit(bg, (0,0))
     else:
         game.tela.fill((10,10,50))
-    msg = game.fonte_titulo.render("VITÓRIA DOS PANTEÕES!", True, OURO)
-    game.tela.blit(msg, (LARGURA//2 - msg.get_width()//2, ALTURA//2 - 100))
-    msg2 = game.fonte_ui.render("VOCÊ SALVOU O UNIVERSO!", True, BRANCO)
-    game.tela.blit(msg2, (LARGURA//2 - msg2.get_width()//2, ALTURA//2 - 40))
+    #msg = game.fonte_titulo.render("VITÓRIA DOS PANTEÕES!", True, OURO)
+    #game.tela.blit(msg, (LARGURA//2 - msg.get_width()//2, ALTURA//2 - 100))
+    #msg2 = game.fonte_ui.render("VOCÊ SALVOU O UNIVERSO!", True, BRANCO)
+    #game.tela.blit(msg2, (LARGURA//2 - msg2.get_width()//2, ALTURA//2 - 40))
     btn = pygame.Rect(LARGURA//2 - 150, 450, 300, 60)
     pos_mouse = pygame.mouse.get_pos()
     if btn.collidepoint(pos_mouse):
@@ -213,7 +219,7 @@ def Vitoria_Epica(game):
     else:
         pygame.draw.rect(game.tela, OURO, btn, 0)
     txt = game.fonte_ui.render("CONTINUAR", True, BRANCO)
-    game.tela.blit(txt, (btn.x+70, btn.y+15))
+    game.tela.blit(txt, (btn.x+85, btn.y+15))
     mx, my = pygame.mouse.get_pos()
     if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
         game.estado_jogo = "LEVEL_MENU"

@@ -3,17 +3,21 @@
 ALTURA = 650
 LARGURA = 900
 
+# Cores
 FUNDO_MENU = (10, 10, 25)
- 
-NUM_LEVELS = 3
-
 GRAMA = (34, 139, 34)
 ESTRADA = (100, 80, 60)
 OURO = (218, 165, 32)
 OURO_HOVER = (219, 206, 26)
 BRANCO = (255, 255, 255)
 CINZA = (110, 110, 110)
-CORES_DROP = {1: (255, 215, 0), 2: (0, 255, 255), 3: (128, 0, 128)}
+AMARELO = (255, 215, 0)
+CIANO = (0, 255, 255)
+ROXO = (128, 0, 128)
+CORES_DROP = {1: AMARELO , 2: CIANO , 3: ROXO}
+
+#Configurações das partidas
+NUM_LEVELS = 3
 
 CAMINHO = [
     [(0, 300), (250, 300), (250, 100),

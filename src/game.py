@@ -18,7 +18,7 @@ class Game:
 
         self.fonte_titulo = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 50)
         self.fonte_ui = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 30)
-        self.fonte_pequena = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 35)
+        self.fonte_pequena = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 22)
 
         self.lista_tipos = ["Zeus", "Anubis", "Odin"]
         self.indice_tipo = 0
