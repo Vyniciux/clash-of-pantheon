@@ -2,7 +2,7 @@ import os
 import pygame
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ASSETS_DIR = os.path.join(BASE_DIR, "assets")
+ASSETS_DIR = os.path.join(BASE_DIR, "../assets")
 
 def carregar_sprite(nome_arquivo, scale_to_screen=False, largura=900, altura=650):
     caminho = os.path.join(ASSETS_DIR, nome_arquivo)
@@ -47,6 +47,7 @@ def carregar_todos_assets():
     BOSS1_FILENAME = "cerbero.png"
     BOSS2_FILENAME = "mumia.png"
     BOSS3_FILENAME = "jormungand.png"
+    COIN_FILENAME = "coin.png"
 
     SPRITE_ROUND1 = tentar_carregar(SPRITE_ROUND1_FILENAME)
     SPRITE_ROUND2 = tentar_carregar(SPRITE_ROUND2_FILENAME)
@@ -69,6 +70,7 @@ def carregar_todos_assets():
     SPRITE_BOSS1 = tentar_carregar(BOSS1_FILENAME)
     SPRITE_BOSS2 = tentar_carregar(BOSS2_FILENAME)
     SPRITE_BOSS3 = tentar_carregar(BOSS3_FILENAME)
+    SPRITE_COIN = tentar_carregar(COIN_FILENAME)
 
     SPRITES = {
         "SPRITE_ROUND1": SPRITE_ROUND1,
@@ -95,6 +97,7 @@ def carregar_todos_assets():
             "Anubis": [250, 260, 1, 20, (200, 180, 0)],
             "Odin":   [400, 230, 5, 20, (50, 50, 100)]
         },
-        "TOWER_RADIO_OVERRIDE": {"Zeus":20,"Anubis":20,"Odin":24}
+        "TOWER_RADIO_OVERRIDE": {"Zeus":20,"Anubis":20,"Odin":24},
+        "COIN": SPRITE_COIN
     }
     return SPRITES
