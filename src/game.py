@@ -52,10 +52,16 @@ class Game:
         self.spawn_timer = 0
         self.spawn_count = 0
 
+        #Botões de level
         self.level_buttons = []
         for i in range(NUM_LEVELS):
-            self.level_buttons.append(pygame.Rect(100+ 140*i,100,110,110))
-        self.last_level = 0
+            self.level_buttons.append(
+                pygame.Rect(
+                    120+ 140*i - (i//5)*140*5, #PosX
+                    100 + (i//5)*140, #PosY
+                    110,110))
+        self.last_level = 1
+        self.actual_level = 0
 
     def set_popup(self, texto, cor):
         self.mensagem_popup = (texto, cor, pygame.time.get_ticks())
@@ -124,6 +130,7 @@ class Game:
                 elif self.estado_jogo == "LEVEL_MENU":
                     for i in range(self.last_level+1):
                         if self.level_buttons[i].collidepoint(ev.pos):
+                            self.actual_level = i
                             self.estado_jogo = "JOGANDO"
                 elif self.estado_jogo == "JOGANDO":
                     mx, my = pygame.mouse.get_pos()
@@ -148,7 +155,7 @@ class Game:
                     else:
                         custo = DADOS_DEUSES[self.selecionado][0]
                         if self.ouro >= custo and my < 550:
-                            if esta_no_caminho(mx, my, CAMINHO[0]):
+                            if esta_no_caminho(mx, my, CAMINHO[self.actual_level]):
                                 self.set_popup("Não pode construir no caminho!", (150,0,0))
                             elif not pode_construir_torre(mx, my, self.selecionado, self.lista_torres, TOWER_RADIO, MIN_DIST_MARGIN):
                                 self.set_popup("Torre muito próxima!", (150,0,0))
