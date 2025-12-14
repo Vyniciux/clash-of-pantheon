@@ -9,18 +9,55 @@ def Menu(game):
         game.tela.blit(bg, (0,0))
     else:
         game.tela.fill(FUNDO_MENU)
-    #t = game.fonte_titulo.render("CLASH OF PANTHEONS", True, OURO)
-    #game.tela.blit(t, (100,150))
-    btn = pygame.Rect(300,450,300,60)
+        
+    btn_iniciar = pygame.Rect(300, 400, 300, 50)
+    btn_descricao = pygame.Rect(300, 470, 300, 50)
+    
+    btn_creditos = pygame.Rect(300, 540, 140, 50) 
+    btn_sair = pygame.Rect(460, 540, 140, 50) 
 
     pos_mouse = pygame.mouse.get_pos()
-    if btn.collidepoint(pos_mouse):
-        pygame.draw.rect(game.tela, OURO_HOVER, btn, 0)
-    else:
-        pygame.draw.rect(game.tela, OURO, btn, 0)
 
-    txt = game.fonte_ui.render("INICIAR DEFESA", True, BRANCO)
-    game.tela.blit(txt, (btn.x+60, btn.y+15))
+    def desenhar_botao(retangulo, texto, cor_normal, cor_hover, fonte, cor_texto=PRETO, cor_borda=PRETO, espessura_borda=3):
+        
+        # 1. Desenha o Retângulo da Borda (ligeiramente maior)
+        retangulo_borda = retangulo.inflate(espessura_borda * 2, espessura_borda * 2) 
+        pygame.draw.rect(game.tela, cor_borda, retangulo_borda, 0)
+        
+        # 2. Desenha o Retângulo Interno 
+        cor = cor_hover if retangulo.collidepoint(pos_mouse) else cor_normal
+        pygame.draw.rect(game.tela, cor, retangulo, 0)
+        
+
+        txt = fonte.render(texto, True, cor_texto)
+        game.tela.blit(txt, (retangulo.x + (retangulo.width - txt.get_width()) // 2, retangulo.y + (retangulo.height - txt.get_height()) // 2))
+
+    # Desenho dos Botões
+    desenhar_botao(btn_iniciar, "INICIAR DEFESA", OURO, OURO_HOVER, game.fonte_ui)
+    desenhar_botao(btn_descricao, "DESCRIÇÃO", OURO, OURO_HOVER, game.fonte_ui)
+    
+    # Botões pequenos
+    desenhar_botao(btn_creditos, "CRÉDITOS", CINZA, (150, 150, 150), game.fonte_pequena) 
+    desenhar_botao(btn_sair, "SAIR", (200, 0, 0), (255, 60, 60), game.fonte_pequena) 
+
+    if pygame.mouse.get_pressed()[0]:
+        mx, my = pos_mouse
+        
+        # INICIAR DEFESA 
+        if btn_iniciar.collidepoint(mx, my):
+            game.reset_jogo() 
+            
+        # DESCRIÇÃO 
+        elif btn_descricao.collidepoint(mx, my):
+            game.estado_jogo = "DESCRIÇÃO"
+            
+        # CRÉDITOS 
+        elif btn_creditos.collidepoint(mx, my):
+            game.estado_jogo = "CREDITOS"
+            
+        # SAIR 
+        elif btn_sair.collidepoint(mx, my):
+            game.rodando = False
 
 def Levels(game):
 

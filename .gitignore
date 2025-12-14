@@ -1,0 +1,13 @@
+# .gitignore
+
+# Ambientes virtuais
+venv/
+src/venv/
+.venv/
+
+# Arquivos de bytecode Python
+*.pyc
+__pycache__/
+
+# Logs e arquivos temporários
+*.log
