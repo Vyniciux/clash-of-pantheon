@@ -15,6 +15,7 @@ CINZA = (110, 110, 110)
 AMARELO = (255, 215, 0)
 CIANO = (0, 255, 255)
 ROXO = (128, 0, 128)
+AZUL_ESCURO = (10, 10, 50)
 CORES_DROP = {1: AMARELO , 2: CIANO , 3: ROXO}
 
 #Configurações das partidas

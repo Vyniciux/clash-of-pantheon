@@ -127,10 +127,7 @@ class Game:
             if ev.type == pygame.QUIT:
                 self.rodando = False
             if ev.type == pygame.MOUSEBUTTONDOWN:
-                if self.estado_jogo == "MENU":
-                    if pygame.Rect(300,450,300,60).collidepoint(ev.pos):
-                        self.reset_jogo()
-                elif self.estado_jogo == "LEVEL_MENU":
+                if self.estado_jogo == "LEVEL_MENU":
                     for i in range(self.last_level+1):
                         if self.level_buttons[i].collidepoint(ev.pos):
                             self.actual_level = i
@@ -188,6 +185,7 @@ class Game:
             self.treat_events()
 
             if self.estado_jogo == "MENU": Menu(self)
+            elif self.estado_jogo == "DESCRIÇÃO": Descricao(self)
             elif self.estado_jogo == "LEVEL_MENU": Levels(self)
             elif self.estado_jogo == "JOGANDO": Jogando(self)
             elif self.estado_jogo == "EPILOGO": Epilogo(self)
