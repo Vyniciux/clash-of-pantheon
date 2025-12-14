@@ -100,4 +100,4 @@ class Drop:
         self.sprite = sprite
 
 # função auxiliar usada por Torre.atacar
-from utils import desenhar_raio
+from src.utils import desenhar_raio
