@@ -1,6 +1,7 @@
 import math
 import random
 import pygame
+from src.settings import *
 
 class Particula:
     def __init__(self, x, y, cor):
@@ -18,17 +19,19 @@ class Particula:
             pygame.draw.circle(surface, self.cor, (int(self.x), int(self.y)), 4)
 
 class Inimigo:
-    def __init__(self, e_boss, sprite, caminho, round_atual, nivel_fantasma):
+    def __init__(self, game, caminho, tipo, nivel_fantasma):
+        inimigo = INIMIGOS_DADOS[tipo]
         self.CAMINHO = caminho
-        self.x, self.y = self.CAMINHO[0]
+        self.x, self.y = caminho[0]
         self.indice = 0
-        self.e_boss = e_boss
-        base_vida = (10 + (round_atual * 5)) * nivel_fantasma
-        self.vida = base_vida if not e_boss else 150 * round_atual
-        self.velocidade = 1.2 if e_boss else 2.0
-        self.raio = 25 if e_boss else 12
+        self.e_boss = inimigo["BOSS_FLAG"]
+        base_vida = inimigo["VIDA_BASE"]
+        self.vida = base_vida if not self.e_boss else 150 * nivel_fantasma
+        self.velocidade = inimigo["VELOCIDADE"]
+        self.raio = 25 if self.e_boss else 12
         self.pass_cooldown = 0
-        self.sprite = sprite
+        self.sprite = game.SPRITES[inimigo["SPRITE"]]
+
     def mover(self):
         if self.indice < len(self.CAMINHO) - 1:
             alvo = self.CAMINHO[self.indice + 1]
@@ -85,10 +88,11 @@ class Torre:
         if self.tipo == "Zeus":
             desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=10, max_offset=22, espessura=3)
         elif self.tipo == "Odin":
+            desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=2, max_offset=22, espessura=3)
             pygame.draw.circle(tela, (20,20,20), (int(alvo.x - 5), int(alvo.y - 5)), 6)
             pygame.draw.circle(tela, (40,40,40), (int(alvo.x + 5), int(alvo.y + 5)), 6)
         else:
-            pygame.draw.line(tela, self.cor, (self.x, self.y), (alvo.x, alvo.y), 3)
+            desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=3, max_offset=22, espessura=5)
         self.anim_timer = self.anim_duration
 
 class Drop:

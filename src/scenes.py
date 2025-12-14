@@ -39,33 +39,33 @@ def Levels(game):
             pygame.draw.rect(game.tela, OURO_HOVER, btn, 0)
         else:
             pygame.draw.rect(game.tela, OURO, btn, 0)
-        txt = game.fonte_titulo.render(str(i), True, BRANCO)
+        txt = game.fonte_titulo.render(str(i+1), True, BRANCO)
         game.tela.blit(txt, (btn.x+45, btn.y+35))
     
 def Jogando(game):
     game.tela.fill(GRAMA)
-    pygame.draw.lines(game.tela, ESTRADA, False, CAMINHO[0], 50)
+    pygame.draw.lines(game.tela, ESTRADA, False, CAMINHO[game.actual_level], 50)
     dt = game.relogio.tick(60)
 
+    # A fase agora é comandada por uma lista que funciona como um script 
+    # dos montros que devem ser espawnados
     game.spawn_timer += 1
-    if game.alminhas_restantes > 0 and game.spawn_timer > 40:
-        chosen_sprite = game.SPRITES["SPRITE_ROUND1"]
-        if game.round_atual == 2:
-            chosen_sprite = game.SPRITES["SPRITE_ROUND2"]
-        elif game.round_atual >= 3:
-            chosen_sprite = game.SPRITES["SPRITE_ROUND3"]
-        game.lista_inimigos.append(Inimigo(False, chosen_sprite, CAMINHO[0], game.round_atual, game.nivel_fantasma))
+    if game.alminhas_restantes > 0 and game.spawn_timer > game.espera:
+        game.lista_inimigos.append(Inimigo(game, CAMINHO[game.actual_level], game.inimigo_atual, game.nivel_fantasma))
         game.spawn_count += 1
         game.alminhas_restantes -= 1
         game.spawn_timer = 0
-    elif game.alminhas_restantes == 0 and len(game.lista_inimigos) == 0 and game.round_atual <= 3:
-        boss_sprite = game.SPRITES["SPRITE_BOSS1"]
-        if game.round_atual == 2:
-            boss_sprite = game.SPRITES["SPRITE_BOSS2"]
-        elif game.round_atual == 3:
-            boss_sprite = game.SPRITES["SPRITE_BOSS3"]
-        game.lista_inimigos.append(Inimigo(True, boss_sprite, CAMINHO[0], game.round_atual, game.nivel_fantasma))
-        game.alminhas_restantes = -1
+    elif game.spawn_timer > game.espera_orda:
+        if(game.round_atual != len(FASE_SCRIPT[game.actual_level])): #Se ainda não acabou
+            game.inimigo_atual = FASE_SCRIPT[game.actual_level][game.round_atual][0]
+            game.alminhas_restantes = FASE_SCRIPT[game.actual_level][game.round_atual][1]
+            game.espera = FASE_SCRIPT[game.actual_level][game.round_atual][2]
+            game.espera_orda = FASE_SCRIPT[game.actual_level][game.round_atual][3]
+            game.round_atual += 1
+        elif (len(game.lista_inimigos) == 0):
+            game.estado_jogo = "EPILOGO"
+
+        
 
     for t in list(game.lista_torres):
         t.atacar(game.lista_inimigos, game.tela, game.multiplicador_dano, game.multiplicador_vel)
@@ -108,16 +108,16 @@ def Jogando(game):
                     game.nivel_fantasma += 0.15
                     game.set_popup("Fantasmas mais fortes!", (150,0,0))
             else:
-                for _ in range(30):
-                    game.lista_particulas.append(Particula(i.x, i.y, CORES_DROP[game.round_atual]))
+                for _ in range(30): #Argumento "game.round_atual" foi trocado por 1, no caso o contexto de rounds mudou
+                    game.lista_particulas.append(Particula(i.x, i.y, CORES_DROP[1]))
                 if game.round_atual == 1 and game.SPRITES["SPRITE_DROP_RAIO"] is not None:
-                    game.lista_drops.append(Drop(i.x, i.y, game.round_atual, sprite=game.SPRITES["SPRITE_DROP_RAIO"]))
+                    game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_RAIO"]))
                 elif game.round_atual == 2 and game.SPRITES["SPRITE_DROP_HERMES"] is not None:
-                    game.lista_drops.append(Drop(i.x, i.y, game.round_atual, sprite=game.SPRITES["SPRITE_DROP_HERMES"]))
+                    game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_HERMES"]))
                 elif game.round_atual == 3 and game.SPRITES["SPRITE_DROP_CHAVE"] is not None:
-                    game.lista_drops.append(Drop(i.x, i.y, game.round_atual, sprite=game.SPRITES["SPRITE_DROP_CHAVE"]))
+                    game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_CHAVE"]))
                 else:
-                    game.lista_drops.append(Drop(i.x, i.y, game.round_atual))
+                    game.lista_drops.append(Drop(i.x, i.y, 1))
                 if game.round_atual < 3:
                     game.round_atual += 1
                     game.alminhas_restantes = 30
@@ -126,14 +126,14 @@ def Jogando(game):
             except:
                 pass
 
-        elif i.indice >= len(CAMINHO[0]) - 1:
+        elif i.indice >= len(CAMINHO[game.actual_level]) - 1:
             dano = 5 if i.e_boss else 1
             if i.e_boss:
                 if i.pass_cooldown == 0:
                     game.vidas -= dano
                     i.pass_cooldown = 180
                     game.set_popup("O Chefe feriu o portal!", (150,0,0))
-                i.x, i.y = CAMINHO[0][0]
+                i.x, i.y = CAMINHO[game.actual_level][0]
                 i.indice = 0
             else:
                 game.vidas -= dano
@@ -224,7 +224,8 @@ def Vitoria_Epica(game):
     if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
         game.estado_jogo = "LEVEL_MENU"
 
-        game.last_level += 1 #experimental
+        if game.actual_level == game.last_level:
+           game.last_level += 1 
         game.reset_jogo()
 
 def Derrota(game):
