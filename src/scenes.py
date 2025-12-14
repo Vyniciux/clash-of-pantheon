@@ -10,12 +10,10 @@ def Menu(game):
     else:
         game.tela.fill(FUNDO_MENU)
         
-    # Ajustei os botões para caber o Tutorial
     btn_iniciar = pygame.Rect(300, 400, 300, 50)
     
-    # Dividi o espaço abaixo em dois botões menores
     btn_descricao = pygame.Rect(300, 470, 145, 50)
-    btn_tutorial = pygame.Rect(455, 470, 145, 50) # Novo Botão
+    btn_tutorial = pygame.Rect(455, 470, 145, 50) 
     
     btn_creditos = pygame.Rect(300, 540, 140, 50) 
     btn_sair = pygame.Rect(460, 540, 140, 50) 
@@ -31,17 +29,16 @@ def Menu(game):
         # Centralizar texto
         txt = fonte.render(texto, True, cor_texto)
         escala = 1.0
-        # Se o texto for muito grande para o botão, diminui a fonte (gambiarra visual)
+        
         if txt.get_width() > retangulo.width - 10:
             txt = pygame.transform.smoothscale(txt, (int(retangulo.width - 10), int(txt.get_height() * 0.8)))
             
         game.tela.blit(txt, (retangulo.x + (retangulo.width - txt.get_width()) // 2, retangulo.y + (retangulo.height - txt.get_height()) // 2))
 
-    # Desenho dos Botões
+    # Botões
     desenhar_botao(btn_iniciar, "INICIAR DEFESA", OURO, OURO_HOVER, game.fonte_ui)
     desenhar_botao(btn_descricao, "DESCRIÇÃO", OURO, OURO_HOVER, game.fonte_pequena)
-    desenhar_botao(btn_tutorial, "TUTORIAL", OURO, OURO_HOVER, game.fonte_pequena) # Azulzinho
-    
+    desenhar_botao(btn_tutorial, "TUTORIAL", OURO, OURO_HOVER, game.fonte_pequena) 
     desenhar_botao(btn_creditos, "CRÉDITOS", CINZA, (150, 150, 150), game.fonte_pequena) 
     desenhar_botao(btn_sair, "SAIR", (200, 0, 0), (255, 60, 60), game.fonte_pequena) 
 
@@ -51,9 +48,9 @@ def Menu(game):
             game.reset_jogo() 
         elif btn_descricao.collidepoint(mx, my):
             game.estado_jogo = "DESCRIÇÃO"
-        elif btn_tutorial.collidepoint(mx, my): # Lógica do novo botão
+        elif btn_tutorial.collidepoint(mx, my): 
             game.estado_jogo = "TUTORIAL"
-            game.tutorial_step = 0 # Reinicia o passo do tutorial
+            game.tutorial_step = 0 
         elif btn_creditos.collidepoint(mx, my):
             game.estado_jogo = "CREDITOS"
         elif btn_sair.collidepoint(mx, my):
