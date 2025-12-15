@@ -9,18 +9,123 @@ def Menu(game):
         game.tela.blit(bg, (0,0))
     else:
         game.tela.fill(FUNDO_MENU)
-    #t = game.fonte_titulo.render("CLASH OF PANTHEONS", True, OURO)
-    #game.tela.blit(t, (100,150))
-    btn = pygame.Rect(300,450,300,60)
+        
+    btn_iniciar = pygame.Rect(300, 400, 300, 50)
+    
+    btn_descricao = pygame.Rect(300, 470, 145, 50)
+    btn_tutorial = pygame.Rect(455, 470, 145, 50) 
+    
+    btn_creditos = pygame.Rect(300, 540, 140, 50) 
+    btn_sair = pygame.Rect(460, 540, 140, 50) 
 
     pos_mouse = pygame.mouse.get_pos()
-    if btn.collidepoint(pos_mouse):
-        pygame.draw.rect(game.tela, OURO_HOVER, btn, 0)
-    else:
-        pygame.draw.rect(game.tela, OURO, btn, 0)
 
-    txt = game.fonte_ui.render("INICIAR DEFESA", True, BRANCO)
-    game.tela.blit(txt, (btn.x+60, btn.y+15))
+    def desenhar_botao(retangulo, texto, cor_normal, cor_hover, fonte, cor_texto=PRETO, cor_borda=PRETO):
+        retangulo_borda = retangulo.inflate(6, 6) 
+        pygame.draw.rect(game.tela, cor_borda, retangulo_borda, 0)
+        cor = cor_hover if retangulo.collidepoint(pos_mouse) else cor_normal
+        pygame.draw.rect(game.tela, cor, retangulo, 0)
+        
+        # Centralizar texto
+        txt = fonte.render(texto, True, cor_texto)
+        escala = 1.0
+        
+        if txt.get_width() > retangulo.width - 10:
+            txt = pygame.transform.smoothscale(txt, (int(retangulo.width - 10), int(txt.get_height() * 0.8)))
+            
+        game.tela.blit(txt, (retangulo.x + (retangulo.width - txt.get_width()) // 2, retangulo.y + (retangulo.height - txt.get_height()) // 2))
+
+    # Botões
+    desenhar_botao(btn_iniciar, "INICIAR DEFESA", OURO, OURO_HOVER, game.fonte_ui)
+    desenhar_botao(btn_descricao, "DESCRIÇÃO", OURO, OURO_HOVER, game.fonte_pequena)
+    desenhar_botao(btn_tutorial, "TUTORIAL", OURO, OURO_HOVER, game.fonte_pequena) 
+    desenhar_botao(btn_creditos, "CRÉDITOS", CINZA, (150, 150, 150), game.fonte_pequena) 
+    desenhar_botao(btn_sair, "SAIR", (200, 0, 0), (255, 60, 60), game.fonte_pequena) 
+
+    if pygame.mouse.get_pressed()[0]:
+        mx, my = pos_mouse
+        if btn_iniciar.collidepoint(mx, my):
+            game.reset_jogo() 
+        elif btn_descricao.collidepoint(mx, my):
+            game.estado_jogo = "DESCRIÇÃO"
+        elif btn_tutorial.collidepoint(mx, my): 
+            game.estado_jogo = "TUTORIAL"
+            game.tutorial_step = 0 
+        elif btn_creditos.collidepoint(mx, my):
+            game.estado_jogo = "CREDITOS"
+        elif btn_sair.collidepoint(mx, my):
+            game.rodando = False
+
+
+def Descricao(game):
+    game.tela.fill((10, 10, 50)) 
+    
+    # Título
+    titulo = "CLASH OF PANTHEONS: THE GATE GUARDIANS"
+    msg_titulo = game.fonte_titulo.render(titulo, True, OURO)
+    game.tela.blit(msg_titulo, (LARGURA//2 - msg_titulo.get_width()//2, 40))
+    
+    y_pos = 120
+    
+    # Subtítulo Sinopse
+    sub_sinopse = game.fonte_ui.render("SINOPSE", True, BRANCO)
+    pygame.draw.line(game.tela, OURO, (LARGURA//2 - sub_sinopse.get_width()//2, y_pos + sub_sinopse.get_height()), (LARGURA//2 + sub_sinopse.get_width()//2, y_pos + sub_sinopse.get_height()), 2)
+    game.tela.blit(sub_sinopse, (LARGURA//2 - sub_sinopse.get_width()//2, y_pos))
+    y_pos += 50
+    
+    linhas_sinopse = [
+        "O equilíbrio entre os mundos foi rompido. O Portal Ancestral, única barreira",
+        "que separa os mortos dos vivos, está sob ataque de hordas de fantasmas, demônios",
+        "e entidades esquecidas. Em um pacto sem precedentes, os grandes Deuses da",
+        "mitologia grega, egípcia e nórdica se uniram para guardar a passagem e evitar o apocalipse.",
+    ]
+    
+    for linha in linhas_sinopse:
+        txt = game.fonte_pequena.render(linha, True, CINZA)
+        game.tela.blit(txt, (LARGURA//2 - txt.get_width()//2, y_pos))
+        y_pos += 30
+
+    # --- Mecânica e Progressão ---
+    y_pos += 40
+    sub_mecanica = game.fonte_ui.render("MECÂNICA E PROGRESSÃO", True, BRANCO)
+    pygame.draw.line(game.tela, OURO, (LARGURA//2 - sub_mecanica.get_width()//2, y_pos + sub_mecanica.get_height()), (LARGURA//2 + sub_mecanica.get_width()//2, y_pos + sub_mecanica.get_height()), 2)
+    game.tela.blit(sub_mecanica, (LARGURA//2 - sub_mecanica.get_width()//2, y_pos))
+    y_pos += 50
+
+    linhas_mecanica = [
+        "Jogue em estilo Tower Defense: invoque Deuses ao longo do caminho que leva ao Portal.",
+        "Cada divindade (Zeus, Anubis, Odin) tem custos e poderes únicos baseados em suas lendas.",
+        "A cada inimigo derrotado,",
+        " colete Ouro Divino para invocar novas sentinelas ou aprimorar as existentes.",
+        "A sinergia entre os Panteões e o posicionamento são a chave para selar a fenda para sempre.",
+    ]
+    
+    for linha in linhas_mecanica:
+        txt = game.fonte_pequena.render(linha, True, CINZA)
+        game.tela.blit(txt, (LARGURA//2 - txt.get_width()//2, y_pos))
+        y_pos += 30
+
+    # Botão Voltar
+    btn = pygame.Rect(LARGURA//2 - 150, 580, 300, 50)
+    pos_mouse = pygame.mouse.get_pos()
+    
+    cor_btn = OURO_HOVER if btn.collidepoint(pos_mouse) else OURO
+    espessura_borda = 3
+    
+    # 1. Borda BRANCA 
+    btn_borda = btn.inflate(espessura_borda * 2, espessura_borda * 2) 
+    pygame.draw.rect(game.tela, BRANCO, btn_borda, 0)
+
+    # 2. botão interno colorido
+    pygame.draw.rect(game.tela, cor_btn, btn, 0)
+
+    txt = game.fonte_ui.render("VOLTAR", True, BRANCO)
+    game.tela.blit(txt, (btn.x + (btn.width - txt.get_width()) // 2, btn.y + (btn.height - txt.get_height()) // 2))
+    
+    # Lógica do clique
+    mx, my = pygame.mouse.get_pos()
+    if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
+         game.estado_jogo = "MENU"
 
 def Levels(game):
 
