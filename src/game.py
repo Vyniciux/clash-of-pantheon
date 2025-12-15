@@ -52,7 +52,7 @@ class Game:
         self.spawn_timer = 0
         self.spawn_count = 0
 
-        #Botões de level
+        #Botões de mapa
         self.level_buttons = []
         for i in range(NUM_LEVELS):
             self.level_buttons.append(
@@ -62,6 +62,8 @@ class Game:
                     110,110))
         self.last_level = 0
         self.actual_level = 0
+
+        self.reset_jogo()
 
     def set_popup(self, texto, cor):
         self.mensagem_popup = (texto, cor, pygame.time.get_ticks())
@@ -82,7 +84,7 @@ class Game:
 
     def reset_jogo(self):
         self.round_atual = 0
-        self.inimigo_atual = ""
+        self.script_inimigo = None
         self.alminhas_restantes = 0
         self.espera = 0
         self.espera_orda = 0
@@ -98,8 +100,12 @@ class Game:
         self.lista_particulas.clear()
         self.lista_drops.clear()
         self.tempo_epilogo = None
-        self.estado_jogo = "LEVEL_MENU"
         self.spawn_count = 0
+
+        self.total_itens = 0 
+        for i in FASE_SCRIPT[self.actual_level]:
+            if(i[3] != 0):
+                self.total_itens += 1
 
     def desenhar_icone_deus(self, cx, cy, tipo, scale=1.0):
         cor = DADOS_DEUSES[tipo][4]
@@ -131,15 +137,14 @@ class Game:
                     for i in range(self.last_level+1):
                         if self.level_buttons[i].collidepoint(ev.pos):
                             self.actual_level = i
+                            self.reset_jogo()
                             self.estado_jogo = "JOGANDO"
                 elif self.estado_jogo == "JOGANDO":
                     mx, my = pygame.mouse.get_pos()
-                    coletou_drop = False
                     for d in self.lista_drops[:]:
                         if not d.coletado and d.rect.collidepoint(ev.pos):
                             d.coletado = True
                             self.drops_coletados += 1
-                            coletou_drop = True
                             if d.rd == 1:
                                 self.multiplicador_dano += 0.25
                                 self.set_popup("Raio Mestre de ZEUS coletado!: Dano de ataque aumentado", CORES_DROP[1])
@@ -148,10 +153,6 @@ class Game:
                                 self.set_popup("Botas de HERMES coletadas!: Atack speed aumentado", CORES_DROP[2])
                             elif d.rd == 3:
                                 self.set_popup("Chave do Portal coletada!: Agora podemos fechar o portal", CORES_DROP[3])
-                    if coletou_drop:
-                        if self.drops_coletados >= 3 and self.estado_jogo != "EPILOGO":
-                            self.tempo_epilogo = pygame.time.get_ticks()
-                            self.estado_jogo = "EPILOGO"
                     else:
                         custo = DADOS_DEUSES[self.selecionado][0]
                         if self.ouro >= custo and my < 550:

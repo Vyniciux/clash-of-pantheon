@@ -19,15 +19,15 @@ class Particula:
             pygame.draw.circle(surface, self.cor, (int(self.x), int(self.y)), 4)
 
 class Inimigo:
-    def __init__(self, game, caminho, tipo, nivel_fantasma):
+    def __init__(self, game, caminho, tipo, nivel_fantasma, drop):
         inimigo = INIMIGOS_DADOS[tipo]
+        self.drop = drop
         self.CAMINHO = caminho
         self.x, self.y = caminho[0]
         self.indice = 0
         self.e_boss = inimigo["BOSS_FLAG"]
-        base_vida = inimigo["VIDA_BASE"]
-        self.vida = base_vida if not self.e_boss else 150 * nivel_fantasma
-        self.velocidade = inimigo["VELOCIDADE"]
+        self.vida = inimigo["VIDA_BASE"] + inimigo["VIDA_BASE"] * nivel_fantasma/10
+        self.velocidade = inimigo["VELOCIDADE"] + inimigo["VELOCIDADE"] * nivel_fantasma / 20
         self.raio = 25 if self.e_boss else 12
         self.pass_cooldown = 0
         self.sprite = game.SPRITES[inimigo["SPRITE"]]
