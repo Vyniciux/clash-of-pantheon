@@ -19,7 +19,7 @@ AZUL_ESCURO = (10, 10, 50)
 CORES_DROP = {1: AMARELO , 2: CIANO , 3: ROXO}
 
 #Configurações das partidas
-NUM_LEVELS = 7
+NUM_LEVELS = 3
 
 CAMINHO = [
     # FASE 1: "A Reta Final" (Simples e direto, bom para tutorial)
@@ -120,34 +120,29 @@ INIMIGOS_DADOS = {
 }
 
 FASE_SCRIPT = [  
-    # --- FASE 1: O Início ---
+    #(Tipo do inimigo, nível, quantidade, drop,  tempo de espera, tempo de espera para a próxima orda)
     [
-        # Onda 1: 5 fantasmas lentos para aquecer
-        ("FANTASMA_1", 5, 60, 180), 
-        # Onda 2: 10 fantasmas, vindo mais rápido
-        ("FANTASMA_1", 10, 40, 300), 
-        # Boss: Vem sozinho
-        ("BOSS_1", 1, 0, 0)
+     
+        ("FANTASMA_1", 3, 10, 0, 60, 180), 
+        ("FANTASMA_1", 2, 20, 0, 30, 180), 
+        ("BOSS_1", 1, 1, 1, 10, 700),
+        ("FANTASMA_2", 2, 20, 0, 30, 250), 
+        ("BOSS_2", 1, 1, 1, 0, 700),
+        ("FANTASMA_1", 3, 20, 0, 40, 180),
+        ("FANTASMA_2", 2, 10, 0, 10, 180),  
+        ("BOSS_3", 2, 1, 1, 0, 0)
     ],
 
-    # --- FASE 2: Aceleração (Inimigos Rápidos) ---
     [
-        # Onda 1: Mistura de lento e rápido
-        ("FANTASMA_1", 5, 50, 60),
-        ("FANTASMA_2", 5, 50, 200),
-        # Onda 2: Rush de 15 rápidos (teste de DPS)
-        ("FANTASMA_2", 15, 30, 300),
-        # Boss
-        ("BOSS_2", 1, 0, 0)
-    ],
-
-    # --- FASE 3: O Apocalipse (Tanques) ---
-    [
-        # Onda 1: Tanques lentos servindo de escudo para os rápidos
-        ("FANTASMA_3", 5, 80, 100),
-        ("FANTASMA_2", 10, 25, 200),
-        # Onda 2: Caos total
-        ("FANTASMA_3", 8, 60, 0), # Note o delay 0: o Boss vem junto com os últimos!
-        ("BOSS_3", 1, 0, 0)
+        ("FANTASMA_1", 2, 15, 0, 30, 200),
+        ("BOSS_1", 2, 1, 1, 0, 300),
+        ("FANTASMA_2", 1, 12, 0, 25, 150),
+        ("FANTASMA_3", 2, 5, 0, 70, 100),
+        ("BOSS_2", 2, 1, 2, 0, 400),
+        ("FANTASMA_1", 3, 20, 0, 15, 100), # Nível 3!
+        ("FANTASMA_2", 2, 10, 0, 20, 100),
+        ("BOSS_3", 2, 1, 3, 0, 0)
     ]
+
+
 ]

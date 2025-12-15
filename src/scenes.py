@@ -45,7 +45,11 @@ def Menu(game):
     if pygame.mouse.get_pressed()[0]:
         mx, my = pos_mouse
         if btn_iniciar.collidepoint(mx, my):
-            game.reset_jogo() 
+            if(game.last_level == 0):
+                game.estado_jogo = "JOGANDO"
+            else:    
+                game.estado_jogo = "LEVEL_MENU"
+
         elif btn_descricao.collidepoint(mx, my):
             game.estado_jogo = "DESCRIÇÃO"
         elif btn_tutorial.collidepoint(mx, my): 
@@ -55,7 +59,6 @@ def Menu(game):
             game.estado_jogo = "CREDITOS"
         elif btn_sair.collidepoint(mx, my):
             game.rodando = False
-
 
 def Descricao(game):
     game.tela.fill((10, 10, 50)) 
@@ -156,21 +159,20 @@ def Jogando(game):
     # dos montros que devem ser espawnados
     game.spawn_timer += 1
     if game.alminhas_restantes > 0 and game.spawn_timer > game.espera:
-        game.lista_inimigos.append(Inimigo(game, CAMINHO[game.actual_level], game.inimigo_atual, game.nivel_fantasma))
+        game.lista_inimigos.append(Inimigo(game, CAMINHO[game.actual_level], game.script_inimigo[0], game.script_inimigo[1], game.script_inimigo[3]))
         game.spawn_count += 1
         game.alminhas_restantes -= 1
         game.spawn_timer = 0
-    elif game.spawn_timer > game.espera_orda:
+    elif game.spawn_timer > game.espera_orda and game.drops_coletados == len(game.lista_drops):
         if(game.round_atual != len(FASE_SCRIPT[game.actual_level])): #Se ainda não acabou
-            game.inimigo_atual = FASE_SCRIPT[game.actual_level][game.round_atual][0]
-            game.alminhas_restantes = FASE_SCRIPT[game.actual_level][game.round_atual][1]
-            game.espera = FASE_SCRIPT[game.actual_level][game.round_atual][2]
-            game.espera_orda = FASE_SCRIPT[game.actual_level][game.round_atual][3]
+            game.script_inimigo = FASE_SCRIPT[game.actual_level][game.round_atual]
+            game.alminhas_restantes = FASE_SCRIPT[game.actual_level][game.round_atual][2]
+            game.espera = FASE_SCRIPT[game.actual_level][game.round_atual][4]
+            game.espera_orda = FASE_SCRIPT[game.actual_level][game.round_atual][5]
+            game.spawn_timer = 0
             game.round_atual += 1
         elif (len(game.lista_inimigos) == 0):
             game.estado_jogo = "EPILOGO"
-
-        
 
     for t in list(game.lista_torres):
         t.atacar(game.lista_inimigos, game.tela, game.multiplicador_dano, game.multiplicador_vel)
@@ -207,25 +209,23 @@ def Jogando(game):
 
         if i.vida <= 0:
             if not i.e_boss:
-                game.ouro += 25
+                game.ouro += 5
                 game.inimigos_mortos_total += 1
-                if game.inimigos_mortos_total % 20 == 0:
-                    game.nivel_fantasma += 0.15
-                    game.set_popup("Fantasmas mais fortes!", (150,0,0))
+                if game.round_atual > len(FASE_SCRIPT[game.actual_level])/2:
+                    game.set_popup("Inimigos mais fortes!", (150,0,0))
             else:
+                game.ouro += 20
                 for _ in range(30): #Argumento "game.round_atual" foi trocado por 1, no caso o contexto de rounds mudou
                     game.lista_particulas.append(Particula(i.x, i.y, CORES_DROP[1]))
-                if game.round_atual == 1 and game.SPRITES["SPRITE_DROP_RAIO"] is not None:
+                if i.drop == 1 and game.SPRITES["SPRITE_DROP_RAIO"] is not None:
                     game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_RAIO"]))
-                elif game.round_atual == 2 and game.SPRITES["SPRITE_DROP_HERMES"] is not None:
+                elif i.drop == 2 and game.SPRITES["SPRITE_DROP_HERMES"] is not None:
                     game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_HERMES"]))
-                elif game.round_atual == 3 and game.SPRITES["SPRITE_DROP_CHAVE"] is not None:
+                elif i.drop == 3 and game.SPRITES["SPRITE_DROP_CHAVE"] is not None:
                     game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_CHAVE"]))
                 else:
                     game.lista_drops.append(Drop(i.x, i.y, 1))
-                if game.round_atual < 3:
-                    game.round_atual += 1
-                    game.alminhas_restantes = 30
+
             try:
                 game.lista_inimigos.remove(i)
             except:
@@ -234,10 +234,10 @@ def Jogando(game):
         elif i.indice >= len(CAMINHO[game.actual_level]) - 1:
             dano = 5 if i.e_boss else 1
             if i.e_boss:
-                if i.pass_cooldown == 0:
-                    game.vidas -= dano
-                    i.pass_cooldown = 180
-                    game.set_popup("O Chefe feriu o portal!", (150,0,0))
+                #if i.pass_cooldown == 0: #Nãe entendi
+                game.vidas -= dano
+                i.pass_cooldown = 180
+                game.set_popup("O Chefe feriu o portal!", (150,0,0))
                 i.x, i.y = CAMINHO[game.actual_level][0]
                 i.indice = 0
             else:
@@ -268,7 +268,7 @@ def Jogando(game):
     pygame.draw.rect(game.tela, (30,30,30), (0,550, LARGURA, 100))
     info = game.fonte_ui.render(f"Round: {game.round_atual}  Ouro: {game.ouro}  Vidas: {game.vidas}", True, BRANCO)
     game.tela.blit(info, (20,570))
-    drops_text = game.fonte_ui.render(f"Itens Divinos: {game.drops_coletados}/3", True, OURO)
+    drops_text = game.fonte_ui.render(f"Itens Divinos: {game.drops_coletados}/{game.total_itens}", True, OURO)
     game.tela.blit(drops_text, (20,600))
     setas = game.fonte_ui.render("(          )", True, BRANCO)
     game.tela.blit(setas, (767, 580))
@@ -301,7 +301,7 @@ def Epilogo(game):
     game.tela.blit(msg, (LARGURA//2 - msg.get_width()//2, ALTURA//2 - 80))
     sub = game.fonte_ui.render("Os Panteões despertam seu poder final...", True, BRANCO)
     game.tela.blit(sub, (LARGURA//2 - sub.get_width()//2, ALTURA//2 - 10))
-    info_drops_big = game.fonte_titulo.render(f"{game.drops_coletados} / 3", True, OURO)
+    info_drops_big = game.fonte_titulo.render(f"{game.drops_coletados} / {game.total_itens}", True, OURO)
     game.tela.blit(info_drops_big, (LARGURA - info_drops_big.get_width() - 30, 560))
     game.desenhar_popup()
     if game.tempo_epilogo is not None and pygame.time.get_ticks() - game.tempo_epilogo >= 3000:
@@ -355,4 +355,4 @@ def Derrota(game):
     mx, my = pygame.mouse.get_pos()
     if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
         game.estado_jogo = "MENU"
-
+        game.reset_jogo()
