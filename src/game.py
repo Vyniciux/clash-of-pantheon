@@ -211,6 +211,8 @@ class Game:
             elif self.estado_jogo == "EPILOGO": Epilogo(self)
             elif self.estado_jogo == "VITORIA_EPICA": Vitoria_Epica(self)
             elif self.estado_jogo == "DERROTA": Derrota(self)
+            elif self.estado_jogo == "CREDITOS": Creditos(self)
+            elif self.estado_jogo == "TUTORIAL": Tutorial(self)
 
             if self.estado_jogo == "EPILOGO" and self.tempo_epilogo is None:
                 self.tempo_epilogo = pygame.time.get_ticks()

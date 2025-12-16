@@ -358,3 +358,205 @@ def Derrota(game):
     if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
         game.estado_jogo = "MENU"
         game.reset_jogo()
+
+def Creditos(game):
+    game.tela.fill((10, 10, 50)) 
+
+    # --- Título ---
+    texto_titulo = "OS ARQUITETOS DO DESTINO"
+    img_titulo = game.fonte_titulo.render(texto_titulo, True, OURO)
+    game.tela.blit(img_titulo, (LARGURA//2 - img_titulo.get_width()//2, 40))
+
+    y_pos = 120
+
+    # --- Seção: Desenvolvedores ---
+    sub_devs = game.fonte_ui.render("DESENVOLVEDORES", True, BRANCO)
+    # Linha decorativa abaixo do subtítulo
+    pygame.draw.line(game.tela, OURO, 
+                     (LARGURA//2 - sub_devs.get_width()//2, y_pos + sub_devs.get_height()), 
+                     (LARGURA//2 + sub_devs.get_width()//2, y_pos + sub_devs.get_height()), 2)
+    game.tela.blit(sub_devs, (LARGURA//2 - sub_devs.get_width()//2, y_pos))
+    
+    y_pos += 50
+
+    # LISTA DE NOMES
+    lista_devs = [
+        "Giovanna de Cassia Silva",
+        "Leandro Vynicius Ramos da Silva",
+        "Pedro Henrique de Souza Bezerra Faustino",
+        "Samuel Elias de Souza",        
+        "Thales Afonso Dornelas Gomes"
+    ]
+
+    for nome in lista_devs:
+        txt = game.fonte_pequena.render(nome, True, CINZA)
+        game.tela.blit(txt, (LARGURA//2 - txt.get_width()//2, y_pos))
+        y_pos += 30
+
+    # --- Seção: Agradecimentos / Recursos ---
+    y_pos += 40
+    sub_assets = game.fonte_ui.render("AGRADECIMENTOS & ASSETS", True, BRANCO)
+    pygame.draw.line(game.tela, OURO, 
+                     (LARGURA//2 - sub_assets.get_width()//2, y_pos + sub_assets.get_height()), 
+                     (LARGURA//2 + sub_assets.get_width()//2, y_pos + sub_assets.get_height()), 2)
+    game.tela.blit(sub_assets, (LARGURA//2 - sub_assets.get_width()//2, y_pos))
+    
+    y_pos += 50
+
+    lista_assets = [
+        "CIn - UFPE",
+        "Professore & Monitores",
+        "Música: [Fonte dos Áudios]",
+        "Engine: Python + Pygame"
+    ]
+
+    for item in lista_assets:
+        txt = game.fonte_pequena.render(item, True, CINZA)
+        game.tela.blit(txt, (LARGURA//2 - txt.get_width()//2, y_pos))
+        y_pos += 30
+
+    # --- Botão Voltar ---
+    btn = pygame.Rect(LARGURA//2 - 150, 580, 300, 50)
+    pos_mouse = pygame.mouse.get_pos()
+    
+    cor_btn = OURO_HOVER if btn.collidepoint(pos_mouse) else OURO
+    
+    # Borda Branca
+    espessura_borda = 3
+    btn_borda = btn.inflate(espessura_borda * 2, espessura_borda * 2) 
+    pygame.draw.rect(game.tela, BRANCO, btn_borda, 0)
+
+    # Botão interno
+    pygame.draw.rect(game.tela, cor_btn, btn, 0)
+
+    txt_btn = game.fonte_ui.render("VOLTAR AO MENU", True, BRANCO)
+    game.tela.blit(txt_btn, (btn.x + (btn.width - txt_btn.get_width()) // 2, 
+                             btn.y + (btn.height - txt_btn.get_height()) // 2))
+    
+    # Lógica do clique
+    mx, my = pygame.mouse.get_pos()
+    if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
+         game.estado_jogo = "MENU"
+
+def Tutorial(game):
+    # Fundo
+    game.tela.fill((10, 10, 50)) 
+
+    # --- Título Principal ---
+    titulo = game.fonte_titulo.render("MANUAL DE DEFESA", True, OURO)
+    game.tela.blit(titulo, (LARGURA//2 - titulo.get_width()//2, 30))
+    
+    # Linha divisória horizontal superior
+    pygame.draw.line(game.tela, OURO, (50, 85), (LARGURA - 50, 85), 2)
+
+    # --- Configuração das Colunas ---
+    coluna1_x = 60
+    coluna2_x = 480 # Metade da tela + margem
+    y_inicial = 110
+    
+    # ================= COLUNA 1: BÁSICO =================
+    y = y_inicial
+    
+    # Seção 1: Objetivo
+    lbl = game.fonte_ui.render("OBJETIVO", True, BRANCO)
+    game.tela.blit(lbl, (coluna1_x, y))
+    y += 40
+    
+    textos_obj = [
+        "O Portal Ancestral está sob ataque.",
+        "Impedir que inimigos cruzem o caminho.",
+        "Se as vidas chegarem a 0, Game Over."
+    ]
+    for linha in textos_obj:
+        txt = game.fonte_pequena.render(f"- {linha}", True, CINZA)
+        game.tela.blit(txt, (coluna1_x, y))
+        y += 30
+
+    y += 20 # Espaço extra
+
+    # Seção 2: Controles
+    lbl = game.fonte_ui.render("CONTROLES", True, BRANCO)
+    game.tela.blit(lbl, (coluna1_x, y))
+    y += 40
+    
+    textos_ctrl = [
+        "Teclas 1, 2, 3: Selecionar Deus.",
+        "Confira a seleção na barra abaixo.",
+        "Clique na grama para criar torres.",
+        "Clique nos itens para pegar."
+    ]
+    for linha in textos_ctrl:
+        txt = game.fonte_pequena.render(f"- {linha}", True, CINZA)
+        game.tela.blit(txt, (coluna1_x, y))
+        y += 30
+
+    # ================= COLUNA 2: ESTRATÉGIA =================
+    y = y_inicial
+    
+    # Linha vertical separando colunas
+    pygame.draw.line(game.tela, (50, 50, 100), (LARGURA//2, 100), (LARGURA//2, 500), 2)
+
+    # Seção 3: Os Deuses
+    lbl = game.fonte_ui.render("OS GUARDIÕES", True, BRANCO)
+    game.tela.blit(lbl, (coluna2_x, y))
+    y += 40
+    
+    # Zeus
+    game.tela.blit(game.fonte_pequena.render("ZEUS (Tecla 1):", True, (255, 215, 0)), (coluna2_x, y))
+    game.tela.blit(game.fonte_pequena.render("Tiro rápido, alvo único.", True, CINZA), (coluna2_x + 180, y))
+    y += 30
+    
+    # Anubis
+    game.tela.blit(game.fonte_pequena.render("ANUBIS (Tecla 2):", True, (200, 0, 200)), (coluna2_x, y))
+    game.tela.blit(game.fonte_pequena.render("Veneno e lentidão.", True, CINZA), (coluna2_x + 180, y))
+    y += 30
+    
+    # Odin
+    game.tela.blit(game.fonte_pequena.render("ODIN (Tecla 3):", True, (0, 150, 255)), (coluna2_x, y))
+    game.tela.blit(game.fonte_pequena.render("Corvos de longo alcance.", True, CINZA), (coluna2_x + 180, y))
+    y += 45 # Espaço maior
+
+    # Seção 4: Economia
+    lbl = game.fonte_ui.render("ECONOMIA", True, BRANCO)
+    game.tela.blit(lbl, (coluna2_x, y))
+    y += 40
+    
+    textos_eco = [
+        "Inimigos derrotados dão Ouro.",
+        "Bosses dão itens raros (clique!).",
+        "Gerencie seu ouro com sabedoria."
+    ]
+    for linha in textos_eco:
+        txt = game.fonte_pequena.render(f"- {linha}", True, CINZA)
+        game.tela.blit(txt, (coluna2_x, y))
+        y += 30
+
+    # --- Botão Voltar ---
+    btn_voltar = pygame.Rect(LARGURA//2 - 150, 560, 300, 60)
+    pos_mouse = pygame.mouse.get_pos()
+    
+    # Hover effect
+    if btn_voltar.collidepoint(pos_mouse):
+        pygame.draw.rect(game.tela, OURO_HOVER, btn_voltar, 0)
+    else:
+        pygame.draw.rect(game.tela, OURO, btn_voltar, 0)
+        
+    # Borda branca simples
+    pygame.draw.rect(game.tela, BRANCO, btn_voltar, 3)
+
+    txt_btn = game.fonte_ui.render("VOLTAR AO MENU", True, BRANCO)
+    game.tela.blit(txt_btn, (btn_voltar.centerx - txt_btn.get_width()//2, btn_voltar.centery - txt_btn.get_height()//2))
+
+    # --- Lógica de Clique ---
+    if pygame.mouse.get_pressed()[0]:
+        mx, my = pos_mouse
+        
+        # Verifica cooldown
+        if not hasattr(game, 'click_cooldown') or game.click_cooldown == 0:
+            if btn_voltar.collidepoint(mx, my):
+                game.estado_jogo = "MENU"
+                game.click_cooldown = 15
+
+    # Atualiza cooldown
+    if hasattr(game, 'click_cooldown') and game.click_cooldown > 0:
+        game.click_cooldown -= 1
