@@ -2,6 +2,7 @@ import os
 import pygame
 import math
 import random
+from audio import AudioManager
 from src.assets import carregar_todos_assets
 from src.entidades import Inimigo, Torre, Drop, Particula
 from src.utils import circular_crop, desenhar_raio, esta_no_caminho, pode_construir_torre
@@ -9,8 +10,12 @@ from src.scenes import *
 from src.settings import *
 
 class Game:
-    def __init__(self):
+    def __init__(self, audio):
         pygame.init()
+        self.audio = audio 
+        
+        self.audio = AudioManager()
+        self.audio.menu()
      
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
         pygame.display.set_caption("Clash of Pantheons: The Gate Guardians")
@@ -64,6 +69,16 @@ class Game:
         self.actual_level = 0
 
         self.reset_jogo()
+        
+    def atualizar_musica(self):
+        if self.estado_jogo in ["MENU", "DESCRIÇÃO", "LEVEL_MENU"]:
+            self.audio.menu()
+        elif self.estado_jogo == "JOGANDO":
+            self.audio.gameplay()
+        elif self.estado_jogo == "VITORIA_EPICA":
+            self.audio.vitoria()
+        elif self.estado_jogo == "DERROTA":
+            self.audio.derrota()    
 
     def set_popup(self, texto, cor):
         self.mensagem_popup = (texto, cor, pygame.time.get_ticks())
@@ -181,9 +196,13 @@ class Game:
 
     def run(self):
         self.rodando = True
+        estado_anterior = None
         while self.rodando:
 
             self.treat_events()
+            if self.estado_jogo != estado_anterior:
+               self.atualizar_musica() 
+               estado_anterior = self.estado_jogo
 
             if self.estado_jogo == "MENU": Menu(self)
             elif self.estado_jogo == "DESCRIÇÃO": Descricao(self)
