@@ -209,20 +209,22 @@ def Jogando(game):
 
         if i.vida <= 0:
             if not i.e_boss:
-                game.ouro += 5
+                gold_por_mob = int(15 * game.nivel_fantasma)
+                game.ouro += gold_por_mob
                 game.inimigos_mortos_total += 1
                 if game.round_atual > len(FASE_SCRIPT[game.actual_level])/2:
                     game.set_popup("Inimigos mais fortes!", (150,0,0))
             else:
-                game.ouro += 20
+                gold_por_boss = int(200 * game.nivel_fantasma)
+                game.ouro += gold_por_boss
                 for _ in range(30): #Argumento "game.round_atual" foi trocado por 1, no caso o contexto de rounds mudou
                     game.lista_particulas.append(Particula(i.x, i.y, CORES_DROP[1]))
                 if i.drop == 1 and game.SPRITES["SPRITE_DROP_RAIO"] is not None:
                     game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_RAIO"]))
                 elif i.drop == 2 and game.SPRITES["SPRITE_DROP_HERMES"] is not None:
-                    game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_HERMES"]))
+                    game.lista_drops.append(Drop(i.x, i.y, 2, sprite=game.SPRITES["SPRITE_DROP_HERMES"]))
                 elif i.drop == 3 and game.SPRITES["SPRITE_DROP_CHAVE"] is not None:
-                    game.lista_drops.append(Drop(i.x, i.y, 1, sprite=game.SPRITES["SPRITE_DROP_CHAVE"]))
+                    game.lista_drops.append(Drop(i.x, i.y, 3, sprite=game.SPRITES["SPRITE_DROP_CHAVE"]))
                 else:
                     game.lista_drops.append(Drop(i.x, i.y, 1))
 
