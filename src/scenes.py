@@ -415,7 +415,7 @@ def Creditos(game):
         "Professores & Monitores",
         "Música: OpenGameArt",
         "Engine: Python + Pygame",
-        "Sprites: Andrya G.",
+        "Sprites: Andrya G. + Samuel E.",
     ]
 
     for item in lista_assets:
