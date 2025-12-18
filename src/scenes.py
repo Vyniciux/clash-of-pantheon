@@ -391,7 +391,7 @@ def Creditos(game):
         "Giovanna de Cassia Silva",
         "Leandro Vynicius Ramos da Silva",
         "Pedro Henrique de Souza Bezerra Faustino",
-        "Samuel Elias de Souza",        
+        "Samuel Elias de Sousa",        
         "Thales Afonso Dornelas Gomes"
     ]
 
@@ -412,9 +412,10 @@ def Creditos(game):
 
     lista_assets = [
         "CIn - UFPE",
-        "Professore & Monitores",
-        "Música: [Fonte dos Áudios]",
-        "Engine: Python + Pygame"
+        "Professores & Monitores",
+        "Música: OpenGameArt",
+        "Engine: Python + Pygame",
+        "Sprites: Andrya G.",
     ]
 
     for item in lista_assets:
@@ -487,11 +488,12 @@ def Tutorial(game):
     y += 40
     
     textos_ctrl = [
-        "Teclas 1, 2, 3: Selecionar Deus.",
-        "Confira a seleção na barra abaixo.",
-        "Clique na grama para criar torres.",
-        "Clique nos itens para pegar."
-    ]
+    "Teclas 1, 2 e 3: selecionar Deus.",
+    "Setas esquerda/direita: trocar Deus.",
+    "Veja o Deus ativo na barra inferior.",
+    "Clique na grama para construir torres.",
+    "Clique nos itens para coletar.",
+]
     for linha in textos_ctrl:
         txt = game.fonte_pequena.render(f"- {linha}", True, CINZA)
         game.tela.blit(txt, (coluna1_x, y))
