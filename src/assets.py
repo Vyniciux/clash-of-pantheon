@@ -48,6 +48,10 @@ def carregar_todos_assets():
     BOSS2_FILENAME = "mumia.png"
     BOSS3_FILENAME = "jormungand.png"
     CAMPO_FILENAME = "campo.png"
+    SEM_MOEDA_FILENAME = "nomoney.png"
+    MAPA1_FILENAME = "mapa1.png"
+    MAPA2_FILENAME = "mapa2.png"
+    MAPA3_FILENAME = "mapa3.png"
 
     SPRITE_ROUND1 = tentar_carregar(SPRITE_ROUND1_FILENAME)
     SPRITE_ROUND2 = tentar_carregar(SPRITE_ROUND2_FILENAME)
@@ -71,6 +75,10 @@ def carregar_todos_assets():
     SPRITE_BOSS2 = tentar_carregar(BOSS2_FILENAME)
     SPRITE_BOSS3 = tentar_carregar(BOSS3_FILENAME)
     SPRITE_CAMPO = tentar_carregar(CAMPO_FILENAME)
+    SEM_MOEDA = tentar_carregar(SEM_MOEDA_FILENAME)
+    IMG_MAPA1 = tentar_carregar(MAPA1_FILENAME)
+    IMG_MAPA2 = tentar_carregar(MAPA2_FILENAME)
+    IMG_MAPA3 = tentar_carregar(MAPA3_FILENAME)
 
     SPRITES = {
         "SPRITE_ROUND1": SPRITE_ROUND1,
@@ -98,6 +106,10 @@ def carregar_todos_assets():
             "Odin":   [400, 230, 5, 20, (0, 128, 255)]
         },
         "TOWER_RADIO_OVERRIDE": {"Zeus":20,"Anubis":20,"Odin":24},
-        "CAMPO": SPRITE_CAMPO
+        "CAMPO": SPRITE_CAMPO,
+        "SEM_MOEDA" : SEM_MOEDA,
+        "MAPA1": IMG_MAPA1,
+        "MAPA2": IMG_MAPA2,
+        "MAPA3": IMG_MAPA3
     }
     return SPRITES

@@ -151,8 +151,13 @@ def Levels(game):
         game.tela.blit(txt, (btn.x+45, btn.y+35))
     
 def Jogando(game):
-    game.tela.fill(GRAMA)
-    pygame.draw.lines(game.tela, ESTRADA, False, CAMINHO[game.actual_level], 50)
+    bg = game.SPRITES.get(f"MAPA{game.actual_level + 1}")
+    if bg is not None:
+        game.tela.blit(bg, (0,0))
+    else:
+        game.tela.fill(GRAMA)
+        pygame.draw.lines(game.tela, ESTRADA, False, CAMINHO[game.actual_level], 50)
+
     dt = game.relogio.tick(60)
 
     # A fase agora é comandada por uma lista que funciona como um script 
@@ -291,6 +296,8 @@ def Jogando(game):
     raio = max(6, int(raio_base * scale))
     nome = game.fonte_pequena.render(game.selecionado, True, BRANCO)
     game.tela.blit(nome, (cx - nome.get_width()//2, cy + raio + 6))
+
+    game.desenhar_personagem()
 
     if game.vidas <= 0:
         game.estado_jogo = "DERROTA"

@@ -21,6 +21,7 @@ class Game:
         pygame.display.set_caption("Clash of Pantheons: The Gate Guardians")
         self.relogio = pygame.time.Clock()
 
+        self.fonte_grande = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 90)
         self.fonte_titulo = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 50)
         self.fonte_ui = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 30)
         self.fonte_pequena = pygame.font.Font("assets/fonts/Semper Invicta.ttf", 22)
@@ -142,6 +143,26 @@ class Game:
         elif tipo == "Odin":
             pygame.draw.circle(self.tela, (20,20,20), (cx - raio//3, cy - raio//3), max(1, raio//6))
             pygame.draw.circle(self.tela, (40,40,40), (cx + raio//3, cy - raio//3), max(1, raio//6))
+
+    def desenhar_personagem(self):
+        pos_mouse = pygame.mouse.get_pos()
+        custo = DADOS_DEUSES[self.selecionado][0]
+        if self.ouro >= custo and pos_mouse[1] < 550:
+            sprite_to_draw = None
+            if(self.selecionado == "Zeus"):
+                sprite_to_draw = self.SPRITES["SPRITE_ZEUS_NORMAL"]
+            elif(self.selecionado == "Anubis"):
+                sprite_to_draw = self.SPRITES["SPRITE_ANUBIS_NORMAL"]
+            elif(self.selecionado == "Odin"):
+                sprite_to_draw = self.SPRITES["SPRITE_ODIN_NORMAL"]
+
+            if(sprite_to_draw != None):
+                img = pygame.transform.smoothscale(sprite_to_draw, (35, 35))
+                self.tela.blit(img, pos_mouse)
+
+        elif pos_mouse[1] < 550:
+            img = pygame.transform.smoothscale(self.SPRITES["SEM_MOEDA"], (45, 45))
+            self.tela.blit(img, pos_mouse)
 
     def treat_events(self):
         for ev in pygame.event.get():
