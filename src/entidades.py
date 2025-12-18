@@ -21,6 +21,7 @@ class Particula:
 class Inimigo:
     def __init__(self, game, caminho, tipo, nivel_fantasma, drop):
         inimigo = INIMIGOS_DADOS[tipo]
+        self.game = game  
         self.drop = drop
         self.CAMINHO = caminho
         self.x, self.y = caminho[0]
@@ -31,6 +32,28 @@ class Inimigo:
         self.raio = 25 if self.e_boss else 12
         self.pass_cooldown = 0
         self.sprite = game.SPRITES[inimigo["SPRITE"]]
+
+    def mover(self):
+        if self.indice < len(self.CAMINHO) - 1:
+            alvo = self.CAMINHO[self.indice + 1]
+            dist = math.hypot(alvo[0] - self.x, alvo[1] - self.y)
+            if dist > self.velocidade:
+                self.x += (alvo[0] - self.x) / dist * self.velocidade
+                self.y += (alvo[1] - self.y) / dist * self.velocidade
+            else:
+                self.indice += 1
+
+    def receber_dano(self, valor):
+        self.vida -= valor
+        if self.vida <= 0:
+            self.vida = 0
+            self.game.inimigos_mortos_total += 1
+            self.game.lista_inimigos.remove(self)
+            self.game.audio.tocar('enemy_death')
+            
+            if self.drop is not None:
+                self.game.lista_drops.append(self.drop)
+
 
     def mover(self):
         if self.indice < len(self.CAMINHO) - 1:
@@ -96,12 +119,21 @@ class Torre:
         self.anim_timer = self.anim_duration
 
 class Drop:
-    def __init__(self, x, y, rd, sprite=None):
+    def __init__(self, x, y, rd, sprite=None, game=None):
         self.rect = pygame.Rect(x-20, y-20, 40, 40)
         self.rd = rd
         self.cor = {1:(255,215,0),2:(0,255,255),3:(128,0,128)}.get(rd)
         self.coletado = False
         self.sprite = sprite
+        self.game = game  
+
+    def coletar(self):
+        if not self.coletado:
+            self.coletado = True
+            if self.game is not None:
+                self.game.audio.tocar('coleta') 
+ 
+
 
 # função auxiliar usada por Torre.atacar
 from src.utils import desenhar_raio

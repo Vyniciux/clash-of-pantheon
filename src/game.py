@@ -15,6 +15,7 @@ class Game:
         self.audio = audio 
         
         self.audio = AudioManager()
+        self.audio.carregar_sons()
         self.audio.menu()
      
         self.tela = pygame.display.set_mode((LARGURA, ALTURA))
@@ -199,6 +200,8 @@ class Game:
                             else:
                                 self.lista_torres.append(Torre(mx, my, self.selecionado, self.SPRITES))
                                 self.ouro -= custo
+                                self.audio.tocar('build')  
+
             if ev.type == pygame.KEYDOWN and self.estado_jogo == "JOGANDO":
                 mudou = False
                 if ev.key == pygame.K_1:
