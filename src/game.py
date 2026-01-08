@@ -60,7 +60,7 @@ class Game:
 
         #Botões de mapa
         self.level_buttons = []
-        for i in range(NUM_LEVELS):
+        for i in range(NUM_LEVELS+1):
             self.level_buttons.append(
                 pygame.Rect(
                     120+ 140*i - (i//5)*140*5, #PosX
@@ -170,11 +170,14 @@ class Game:
                 self.rodando = False
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if self.estado_jogo == "LEVEL_MENU":
-                    for i in range(self.last_level+1):
+                    for i in range(self.last_level+2):
                         if self.level_buttons[i].collidepoint(ev.pos):
-                            self.actual_level = i
-                            self.reset_jogo()
-                            self.estado_jogo = "JOGANDO"
+                            if i == 0:
+                                self.estado_jogo = "MENU"
+                            else:
+                                self.actual_level = i-1
+                                self.reset_jogo()
+                                self.estado_jogo = "JOGANDO"
                 elif self.estado_jogo == "JOGANDO":
                     mx, my = pygame.mouse.get_pos()
                     for d in self.lista_drops[:]:

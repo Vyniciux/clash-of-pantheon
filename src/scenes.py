@@ -119,15 +119,24 @@ def Levels(game):
         game.tela.fill(FUNDO_MENU)
 
     pos_mouse = pygame.mouse.get_pos()
-    for i in range(NUM_LEVELS):
+    for i in range(NUM_LEVELS+1):
         btn = game.level_buttons[i]
         if(i > game.last_level):
-            pygame.draw.rect(game.tela, CINZA, btn, 0)
+            cor = CINZA
+        elif btn.collidepoint(pos_mouse) and i == 0:
+            cor = PRETO_HOVER
         elif btn.collidepoint(pos_mouse):
-            pygame.draw.rect(game.tela, OURO_HOVER, btn, 0)
+            cor = OURO_HOVER
+        elif i == 0:
+            cor = PRETO
         else:
-            pygame.draw.rect(game.tela, OURO, btn, 0)
-        txt = game.fonte_titulo.render(str(i+1), True, BRANCO)
+            cor = OURO
+
+        pygame.draw.rect(game.tela, cor, btn, 0)
+
+        txt = game.fonte_titulo.render(str(i), True, BRANCO)
+        if(i == 0):
+            txt = game.fonte_titulo.render("X", True, BRANCO)
         game.tela.blit(txt, (btn.x+45, btn.y+35))
     
 def Jogando(game):
