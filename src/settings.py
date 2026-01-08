@@ -66,9 +66,10 @@ CAMINHO = [
 ]
 
 DADOS_DEUSES = {
+    #"DEUS": [CUSTO, ALCANCE, VELOCIDADE DE ATAQUE, DANO, COR DO ATAQUE (R, G, B)]
     "Zeus":   [100, 200, 2, 15, (255, 215, 0)],
-    "Anubis": [250, 260, 1, 20, (200, 180, 0)],
-    "Odin":   [400, 230, 5, 20, (50, 50, 100)]
+    "Anubis": [250, 260, 1, 20, (213, 0, 255)],
+    "Odin":   [400, 230, 5, 20, (0, 128, 255)]
 }
 
 TOWER_RADIO = {"Zeus": 20, "Anubis": 20, "Odin": 24}

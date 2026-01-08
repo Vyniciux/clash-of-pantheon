@@ -46,13 +46,10 @@ class Torre:
     def __init__(self, x, y, tipo, sprites_dict):
         self.x, self.y = x, y
         self.tipo = tipo
-        dados = sprites_dict.get("DADOS_DEUSES_OVERRIDE")
-        if dados is None:
-            self.custo, self.alcance, self.dano_base, self.cadencia_base, self.cor = sprites_dict.get("DADOS_DEUSES_BASE")[tipo]
-        else:
-            self.custo, self.alcance, self.dano_base, self.cadencia_base, self.cor = dados[tipo]
+        dados = DADOS_DEUSES
+        self.custo, self.alcance, self.dano_base, self.cadencia_base, self.cor = dados[tipo]
         self.timer = 0
-        self.raio_torre = sprites_dict.get("TOWER_RADIO_OVERRIDE", {"Zeus":20,"Anubis":20,"Odin":24}).get(tipo, 20)
+        self.raio_torre = TOWER_RADIO.get(tipo)
         if tipo == "Odin":
             self.sprite_normal = sprites_dict.get("SPRITE_ODIN_NORMAL")
             self.sprite_anim = sprites_dict.get("SPRITE_ODIN_ANIM")

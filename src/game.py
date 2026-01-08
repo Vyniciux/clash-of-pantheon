@@ -2,7 +2,7 @@ import os
 import pygame
 import math
 import random
-from audio import AudioManager
+from src.audio import AudioManager
 from src.assets import carregar_todos_assets
 from src.entidades import Inimigo, Torre, Drop, Particula
 from src.utils import circular_crop, desenhar_raio, esta_no_caminho, pode_construir_torre
