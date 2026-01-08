@@ -199,6 +199,38 @@ class Game:
                             else:
                                 self.lista_torres.append(Torre(mx, my, self.selecionado, self.SPRITES))
                                 self.ouro -= custo
+                ##A transição de onde os clique são tratados duplica
+                #a informação da posição do botão.
+                elif self.estado_jogo == "MENU":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(300, 400, 300, 50).collidepoint(mx, my):
+                        if(self.last_level == 0):
+                            self.estado_jogo = "JOGANDO"
+                        else:    
+                            self.estado_jogo = "LEVEL_MENU"
+
+                    elif pygame.Rect(300, 470, 145, 50).collidepoint(mx, my):
+                        self.estado_jogo = "DESCRIÇÃO"
+                    elif pygame.Rect(455, 470, 145, 50).collidepoint(mx, my): 
+                        self.estado_jogo = "TUTORIAL"
+                        self.tutorial_step = 0 
+                    elif pygame.Rect(300, 540, 140, 50).collidepoint(mx, my):
+                        self.estado_jogo = "CREDITOS"
+                    elif pygame.Rect(460, 540, 140, 50).collidepoint(mx, my):
+                        self.rodando = False
+                elif self.estado_jogo == "DESCRIÇÃO":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(LARGURA//2 - 150, 580, 300, 50).collidepoint(mx, my):
+                        self.estado_jogo = "MENU"
+                elif self.estado_jogo == "CREDITOS":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(LARGURA//2 - 150, 580, 300, 50).collidepoint(mx, my):
+                        self.estado_jogo = "MENU"
+                elif self.estado_jogo == "TUTORIAL":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(LARGURA//2 - 150, 560, 300, 60).collidepoint(mx, my):
+                        self.estado_jogo = "MENU"
+                
             if ev.type == pygame.KEYDOWN and self.estado_jogo == "JOGANDO":
                 mudou = False
                 if ev.key == pygame.K_1:

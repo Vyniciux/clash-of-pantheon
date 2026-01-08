@@ -42,24 +42,6 @@ def Menu(game):
     desenhar_botao(btn_creditos, "CRÉDITOS", CINZA, (150, 150, 150), game.fonte_pequena) 
     desenhar_botao(btn_sair, "SAIR", (200, 0, 0), (255, 60, 60), game.fonte_pequena) 
 
-    if pygame.mouse.get_pressed()[0]:
-        mx, my = pos_mouse
-        if btn_iniciar.collidepoint(mx, my):
-            if(game.last_level == 0):
-                game.estado_jogo = "JOGANDO"
-            else:    
-                game.estado_jogo = "LEVEL_MENU"
-
-        elif btn_descricao.collidepoint(mx, my):
-            game.estado_jogo = "DESCRIÇÃO"
-        elif btn_tutorial.collidepoint(mx, my): 
-            game.estado_jogo = "TUTORIAL"
-            game.tutorial_step = 0 
-        elif btn_creditos.collidepoint(mx, my):
-            game.estado_jogo = "CREDITOS"
-        elif btn_sair.collidepoint(mx, my):
-            game.rodando = False
-
 def Descricao(game):
     game.tela.fill((10, 10, 50)) 
     
@@ -124,11 +106,6 @@ def Descricao(game):
 
     txt = game.fonte_ui.render("VOLTAR", True, BRANCO)
     game.tela.blit(txt, (btn.x + (btn.width - txt.get_width()) // 2, btn.y + (btn.height - txt.get_height()) // 2))
-    
-    # Lógica do clique
-    mx, my = pygame.mouse.get_pos()
-    if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
-         game.estado_jogo = "MENU"
 
 def Levels(game):
 
@@ -439,11 +416,6 @@ def Creditos(game):
     txt_btn = game.fonte_ui.render("VOLTAR AO MENU", True, BRANCO)
     game.tela.blit(txt_btn, (btn.x + (btn.width - txt_btn.get_width()) // 2, 
                              btn.y + (btn.height - txt_btn.get_height()) // 2))
-    
-    # Lógica do clique
-    mx, my = pygame.mouse.get_pos()
-    if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
-         game.estado_jogo = "MENU"
 
 def Tutorial(game):
     # Fundo
@@ -553,17 +525,3 @@ def Tutorial(game):
 
     txt_btn = game.fonte_ui.render("VOLTAR AO MENU", True, BRANCO)
     game.tela.blit(txt_btn, (btn_voltar.centerx - txt_btn.get_width()//2, btn_voltar.centery - txt_btn.get_height()//2))
-
-    # --- Lógica de Clique ---
-    if pygame.mouse.get_pressed()[0]:
-        mx, my = pos_mouse
-        
-        # Verifica cooldown
-        if not hasattr(game, 'click_cooldown') or game.click_cooldown == 0:
-            if btn_voltar.collidepoint(mx, my):
-                game.estado_jogo = "MENU"
-                game.click_cooldown = 15
-
-    # Atualiza cooldown
-    if hasattr(game, 'click_cooldown') and game.click_cooldown > 0:
-        game.click_cooldown -= 1
