@@ -10,9 +10,6 @@ def Menu(game):
     else:
         game.tela.fill(FUNDO_MENU)
         
-    title = game.fonte_grande.render("CLASH OF PANTHEONS", True, OURO)
-    game.tela.blit(title, (100,40))
-
     btn_iniciar = pygame.Rect(300, 400, 300, 50)
     
     btn_descricao = pygame.Rect(300, 470, 145, 50)
@@ -25,7 +22,7 @@ def Menu(game):
 
     def desenhar_botao(retangulo, texto, cor_normal, cor_hover, fonte, cor_texto=PRETO, cor_borda=PRETO):
         retangulo_borda = retangulo.inflate(6, 6) 
-        #pygame.draw.rect(game.tela, cor_borda, retangulo_borda, 0)
+        pygame.draw.rect(game.tela, cor_borda, retangulo_borda, 0)
         cor = cor_hover if retangulo.collidepoint(pos_mouse) else cor_normal
         pygame.draw.rect(game.tela, cor, retangulo, 0)
         
@@ -44,6 +41,24 @@ def Menu(game):
     desenhar_botao(btn_tutorial, "TUTORIAL", OURO, OURO_HOVER, game.fonte_pequena) 
     desenhar_botao(btn_creditos, "CRÉDITOS", CINZA, (150, 150, 150), game.fonte_pequena) 
     desenhar_botao(btn_sair, "SAIR", (200, 0, 0), (255, 60, 60), game.fonte_pequena) 
+
+    if pygame.mouse.get_pressed()[0]:
+        mx, my = pos_mouse
+        if btn_iniciar.collidepoint(mx, my):
+            if(game.last_level == 0):
+                game.estado_jogo = "JOGANDO"
+            else:    
+                game.estado_jogo = "LEVEL_MENU"
+
+        elif btn_descricao.collidepoint(mx, my):
+            game.estado_jogo = "DESCRIÇÃO"
+        elif btn_tutorial.collidepoint(mx, my): 
+            game.estado_jogo = "TUTORIAL"
+            game.tutorial_step = 0 
+        elif btn_creditos.collidepoint(mx, my):
+            game.estado_jogo = "CREDITOS"
+        elif btn_sair.collidepoint(mx, my):
+            game.rodando = False
 
 def Descricao(game):
     game.tela.fill((10, 10, 50)) 
@@ -101,14 +116,19 @@ def Descricao(game):
     espessura_borda = 3
     
     # 1. Borda BRANCA 
-    #btn_borda = btn.inflate(espessura_borda * 2, espessura_borda * 2) 
-    #pygame.draw.rect(game.tela, BRANCO, btn_borda, 0)
+    btn_borda = btn.inflate(espessura_borda * 2, espessura_borda * 2) 
+    pygame.draw.rect(game.tela, BRANCO, btn_borda, 0)
 
     # 2. botão interno colorido
     pygame.draw.rect(game.tela, cor_btn, btn, 0)
 
     txt = game.fonte_ui.render("VOLTAR", True, BRANCO)
     game.tela.blit(txt, (btn.x + (btn.width - txt.get_width()) // 2, btn.y + (btn.height - txt.get_height()) // 2))
+    
+    # Lógica do clique
+    mx, my = pygame.mouse.get_pos()
+    if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
+         game.estado_jogo = "MENU"
 
 def Levels(game):
 
@@ -119,24 +139,15 @@ def Levels(game):
         game.tela.fill(FUNDO_MENU)
 
     pos_mouse = pygame.mouse.get_pos()
-    for i in range(NUM_LEVELS+1):
+    for i in range(NUM_LEVELS):
         btn = game.level_buttons[i]
-        if(i > game.last_level+1):
-            cor = CINZA
-        elif btn.collidepoint(pos_mouse) and i == 0:
-            cor = PRETO_HOVER
+        if(i > game.last_level):
+            pygame.draw.rect(game.tela, CINZA, btn, 0)
         elif btn.collidepoint(pos_mouse):
-            cor = OURO_HOVER
-        elif i == 0:
-            cor = PRETO
+            pygame.draw.rect(game.tela, OURO_HOVER, btn, 0)
         else:
-            cor = OURO
-
-        pygame.draw.rect(game.tela, cor, btn, 0)
-
-        txt = game.fonte_titulo.render(str(i), True, BRANCO)
-        if(i == 0):
-            txt = game.fonte_titulo.render("X", True, BRANCO)
+            pygame.draw.rect(game.tela, OURO, btn, 0)
+        txt = game.fonte_titulo.render(str(i+1), True, BRANCO)
         game.tela.blit(txt, (btn.x+45, btn.y+35))
     
 def Jogando(game):
@@ -147,7 +158,7 @@ def Jogando(game):
         game.tela.fill(GRAMA)
         pygame.draw.lines(game.tela, ESTRADA, False, CAMINHO[game.actual_level], 50)
 
-    dt = game.relogio.tick(40)
+    dt = game.relogio.tick(60)
 
     # A fase agora é comandada por uma lista que funciona como um script 
     # dos montros que devem ser espawnados
@@ -419,9 +430,9 @@ def Creditos(game):
     cor_btn = OURO_HOVER if btn.collidepoint(pos_mouse) else OURO
     
     # Borda Branca
-    #espessura_borda = 3
-    #btn_borda = btn.inflate(espessura_borda * 2, espessura_borda * 2) 
-    #pygame.draw.rect(game.tela, BRANCO, btn_borda, 0)
+    espessura_borda = 3
+    btn_borda = btn.inflate(espessura_borda * 2, espessura_borda * 2) 
+    pygame.draw.rect(game.tela, BRANCO, btn_borda, 0)
 
     # Botão interno
     pygame.draw.rect(game.tela, cor_btn, btn, 0)
@@ -429,6 +440,11 @@ def Creditos(game):
     txt_btn = game.fonte_ui.render("VOLTAR AO MENU", True, BRANCO)
     game.tela.blit(txt_btn, (btn.x + (btn.width - txt_btn.get_width()) // 2, 
                              btn.y + (btn.height - txt_btn.get_height()) // 2))
+    
+    # Lógica do clique
+    mx, my = pygame.mouse.get_pos()
+    if pygame.mouse.get_pressed()[0] and btn.collidepoint(mx, my):
+         game.estado_jogo = "MENU"
 
 def Tutorial(game):
     # Fundo
@@ -535,7 +551,21 @@ def Tutorial(game):
         pygame.draw.rect(game.tela, OURO, btn_voltar, 0)
         
     # Borda branca simples
-    #pygame.draw.rect(game.tela, BRANCO, btn_voltar, 3)
+    pygame.draw.rect(game.tela, BRANCO, btn_voltar, 3)
 
     txt_btn = game.fonte_ui.render("VOLTAR AO MENU", True, BRANCO)
     game.tela.blit(txt_btn, (btn_voltar.centerx - txt_btn.get_width()//2, btn_voltar.centery - txt_btn.get_height()//2))
+
+    # --- Lógica de Clique ---
+    if pygame.mouse.get_pressed()[0]:
+        mx, my = pos_mouse
+        
+        # Verifica cooldown
+        if not hasattr(game, 'click_cooldown') or game.click_cooldown == 0:
+            if btn_voltar.collidepoint(mx, my):
+                game.estado_jogo = "MENU"
+                game.click_cooldown = 15
+
+    # Atualiza cooldown
+    if hasattr(game, 'click_cooldown') and game.click_cooldown > 0:
+        game.click_cooldown -= 1
