@@ -2,7 +2,7 @@ import os
 import pygame
 import math
 import random
-from audio import AudioManager
+from src.audio import AudioManager
 from src.assets import carregar_todos_assets
 from src.entidades import Inimigo, Torre, Drop, Particula
 from src.utils import circular_crop, desenhar_raio, esta_no_caminho, pode_construir_torre
@@ -61,7 +61,7 @@ class Game:
 
         #Botões de mapa
         self.level_buttons = []
-        for i in range(NUM_LEVELS):
+        for i in range(NUM_LEVELS+1):
             self.level_buttons.append(
                 pygame.Rect(
                     120+ 140*i - (i//5)*140*5, #PosX
@@ -171,11 +171,14 @@ class Game:
                 self.rodando = False
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if self.estado_jogo == "LEVEL_MENU":
-                    for i in range(self.last_level+1):
+                    for i in range(self.last_level+2):
                         if self.level_buttons[i].collidepoint(ev.pos):
-                            self.actual_level = i
-                            self.reset_jogo()
-                            self.estado_jogo = "JOGANDO"
+                            if i == 0:
+                                self.estado_jogo = "MENU"
+                            else:
+                                self.actual_level = i-1
+                                self.reset_jogo()
+                                self.estado_jogo = "JOGANDO"
                 elif self.estado_jogo == "JOGANDO":
                     mx, my = pygame.mouse.get_pos()
                     for d in self.lista_drops[:]:
@@ -201,7 +204,38 @@ class Game:
                                 self.lista_torres.append(Torre(mx, my, self.selecionado, self.SPRITES))
                                 self.ouro -= custo
                                 self.audio.tocar('build')  
+                ##A transição de onde os clique são tratados duplica
+                #a informação da posição do botão.
+                elif self.estado_jogo == "MENU":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(300, 400, 300, 50).collidepoint(mx, my):
+                        if(self.last_level == 0):
+                            self.estado_jogo = "JOGANDO"
+                        else:    
+                            self.estado_jogo = "LEVEL_MENU"
 
+                    elif pygame.Rect(300, 470, 145, 50).collidepoint(mx, my):
+                        self.estado_jogo = "DESCRIÇÃO"
+                    elif pygame.Rect(455, 470, 145, 50).collidepoint(mx, my): 
+                        self.estado_jogo = "TUTORIAL"
+                        self.tutorial_step = 0 
+                    elif pygame.Rect(300, 540, 140, 50).collidepoint(mx, my):
+                        self.estado_jogo = "CREDITOS"
+                    elif pygame.Rect(460, 540, 140, 50).collidepoint(mx, my):
+                        self.rodando = False
+                elif self.estado_jogo == "DESCRIÇÃO":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(LARGURA//2 - 150, 580, 300, 50).collidepoint(mx, my):
+                        self.estado_jogo = "MENU"
+                elif self.estado_jogo == "CREDITOS":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(LARGURA//2 - 150, 580, 300, 50).collidepoint(mx, my):
+                        self.estado_jogo = "MENU"
+                elif self.estado_jogo == "TUTORIAL":
+                    mx, my = pygame.mouse.get_pos()
+                    if pygame.Rect(LARGURA//2 - 150, 560, 300, 60).collidepoint(mx, my):
+                        self.estado_jogo = "MENU"
+                
             if ev.type == pygame.KEYDOWN and self.estado_jogo == "JOGANDO":
                 mudou = False
                 if ev.key == pygame.K_1:
