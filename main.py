@@ -1,5 +1,5 @@
 import pygame
-from audio import AudioManager
+from src.audio import AudioManager
 from src.game import Game
 
 def main():
