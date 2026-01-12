@@ -68,26 +68,27 @@ class Torre:
     def atacar(self, inimigos, tela, multiplicador_dano, multiplicador_vel):
         if self.timer > 0:
             self.timer -= 1
+            return
         alvo = None
         min_dist = None
+        
         for inimigo in inimigos:
             d = math.hypot(inimigo.x - self.x, inimigo.y - self.y)
             if d <= self.alcance:
                 if min_dist is None or d < min_dist:
                     min_dist = d
                     alvo = inimigo
+                    break
+
         if alvo is None:
             return
-        if self.timer > 0:
-            return
+
         alvo.vida -= self.dano_base * multiplicador_dano
         self.timer = int(self.cadencia_base / multiplicador_vel)
         if self.tipo == "Zeus":
             desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=10, max_offset=22, espessura=3)
         elif self.tipo == "Odin":
-            desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=2, max_offset=22, espessura=3)
-            pygame.draw.circle(tela, (20,20,20), (int(alvo.x - 5), int(alvo.y - 5)), 6)
-            pygame.draw.circle(tela, (40,40,40), (int(alvo.x + 5), int(alvo.y + 5)), 6)
+            desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=2, max_offset=22, espessura=6)
         else:
             desenhar_raio(tela, (self.x, self.y), (alvo.x, alvo.y), self.cor, segmentos=3, max_offset=22, espessura=5)
         self.anim_timer = self.anim_duration

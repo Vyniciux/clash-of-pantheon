@@ -121,7 +121,7 @@ def Levels(game):
     pos_mouse = pygame.mouse.get_pos()
     for i in range(NUM_LEVELS+1):
         btn = game.level_buttons[i]
-        if(i > game.last_level):
+        if(i > game.last_level+1):
             cor = CINZA
         elif btn.collidepoint(pos_mouse) and i == 0:
             cor = PRETO_HOVER
@@ -147,7 +147,7 @@ def Jogando(game):
         game.tela.fill(GRAMA)
         pygame.draw.lines(game.tela, ESTRADA, False, CAMINHO[game.actual_level], 50)
 
-    dt = game.relogio.tick(60)
+    dt = game.relogio.tick(40)
 
     # A fase agora é comandada por uma lista que funciona como um script 
     # dos montros que devem ser espawnados
